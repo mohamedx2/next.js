@@ -336,6 +336,7 @@ export const experimentalSchema = {
   serverMinification: z.boolean().optional(),
   serverSourceMaps: z.boolean().optional(),
   useWasmBinary: z.boolean().optional(),
+  wasmBackend: z.boolean().optional(),
   useLightningcss: z.boolean().optional(),
   testProxy: z.boolean().optional(),
   defaultTestRunner: z.enum(SUPPORTED_TEST_RUNNERS_LIST).optional(),

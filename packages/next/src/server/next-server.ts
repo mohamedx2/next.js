@@ -1039,6 +1039,24 @@ export default class NextNodeServer extends BaseServer<
       throw new Error('Invariant: pathname is undefined')
     }
 
+    // Experimental WASM Backend Routing
+    if (this.nextConfig.experimental.wasmBackend && pathname.startsWith('/api/wasm/')) {
+      const { wasmRequestHandler, initializeWasmRuntime } = await import('./wasm/integration');
+      const serviceName = pathname.replace('/api/wasm/', '');
+      const servicesDir = join(this.dir, 'wasm-services');
+      
+      await initializeWasmRuntime(servicesDir);
+      const wasmRes = await wasmRequestHandler(req as any, { service: serviceName });
+      
+      // Convert Web Response to Node Response
+      res.statusCode = wasmRes.status;
+      for (const [key, value] of wasmRes.headers) {
+        res.setHeader(key, value);
+      }
+      res.body(await wasmRes.text()).send();
+      return true;
+    }
+
     // When in minimal mode we do not bubble the fallback as the
     // router-server is not present to handle the error
     addRequestMeta(req, 'bubbleNoFallback', this.minimalMode ? undefined : true)

@@ -322,6 +322,7 @@ export interface LoggingConfig {
 }
 
 export interface ExperimentalConfig {
+  wasmBackend?: boolean
   adapterPath?: string
   useSkewCookie?: boolean
   /** @deprecated use top-level `cacheHandlers` instead */
@@ -1784,6 +1785,7 @@ export interface NextConfigRuntime {
     | 'maxPostponedStateSize'
     | 'devCacheControlNoCache'
     | 'exposeTestingApiInProductionBuild'
+    | 'wasmBackend'
   > & {
     // Pick on @internal fields generates invalid .d.ts files
     /** @internal */
@@ -1848,6 +1850,7 @@ export function getNextConfigRuntime(
         maxPostponedStateSize: ex.maxPostponedStateSize,
         devCacheControlNoCache: ex.devCacheControlNoCache,
         exposeTestingApiInProductionBuild: ex.exposeTestingApiInProductionBuild,
+        wasmBackend: ex.wasmBackend,
 
         trustHostHeader: ex.trustHostHeader,
         isExperimentalCompile: ex.isExperimentalCompile,
